@@ -12,4 +12,12 @@ class SimpleQueueBundle extends Bundle
     {
         $container->addCompilerPass(new WorkerPass());
     }
+
+    /**
+     * Boots the Bundle.
+     */
+    public function boot()
+    {
+        $this->container->get('simple_queue');
+    }
 }
