@@ -1,0 +1,9 @@
+services:
+    simple_queue:
+        class: fritool\SimpleQueueBundle\SimpleQueue
+        factory: ['fritool\SimpleQueueBundle\SimpleQueue', getInstance]
+        arguments:
+            - '%simple_queue%'
+            - '@logger'
+        tags:
+            - { name: monolog.logger, channel: simple_queue }
