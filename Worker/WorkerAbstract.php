@@ -50,7 +50,7 @@ abstract class WorkerAbstract implements \JsonSerializable
      *
      * @param $args
      */
-    private function __construct($args)
+    public function __construct(array $args = [])
     {
         $this->_args = $args;
         $this->_jid = uniqid();
@@ -66,24 +66,6 @@ abstract class WorkerAbstract implements \JsonSerializable
         $self->addToQueue();
     }
 
-    /**
-     * @param                      $workerData
-     * @param LoggerInterface|null $logger
-     *
-     * @return WorkerAbstract
-     */
-    public static function create(
-        $workerData, LoggerInterface $logger = null
-    ): WorkerAbstract
-    {
-        $self = new static($workerData->args);
-        $self->setWorkerData($workerData);
-        if ($logger) {
-            $self->setLogger($logger);
-        }
-
-        return $self;
-    }
 
     public function addToQueue()
     {

@@ -56,6 +56,11 @@ class SimpleQueue
     private $_allowedThreadCount;
 
     /**
+     * @var array
+     */
+    private $_workerMap = [];
+
+    /**
      * SimpleQueue constructor.
      *
      * @param array $config
@@ -94,6 +99,11 @@ class SimpleQueue
     public function getLogger(): LoggerInterface
     {
         return $this->_logger;
+    }
+
+    public function setWorkerMap(array $workerMap)
+    {
+        $this->_workerMap = $workerMap;
     }
 
     public function addToQueue(WorkerAbstract $worker)
@@ -342,7 +352,14 @@ class SimpleQueue
         }
 
         /** @var WorkerAbstract $worker */
-        $worker = $workerClassName::create($workerData, $this->getLogger());
+        if (isset($this->_workerMap[$workerClassName])) {
+            $worker = $this->_workerMap[$workerClassName];
+        } else {
+            $worker = new $workerClassName();
+        }
+
+        $worker->setWorkerData($workerData);
+        $worker->setLogger($this->getLogger());
 
         return $worker;
     }
